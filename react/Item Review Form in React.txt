@@ -1,0 +1,34 @@
+jsx
+Copy code
+import React, { useState } from 'react';
+import axios from 'axios';
+
+const ItemReview = ({ itemId }) => {
+    const [review, setReview] = useState("");
+    const [rating, setRating] = useState(1);
+
+    const submitReview = () => {
+        axios.post('/api/review/item-review', {
+            content: review,
+            rating: rating,
+            itemId: itemId
+        }).then(response => {
+            alert('Review submitted!');
+        });
+    };
+
+    return (
+        <div>
+            <h2>Leave a Review</h2>
+            <textarea value={review} onChange={(e) => setReview(e.target.value)} />
+            <select value={rating} onChange={(e) => setRating(e.target.value)}>
+                {[1, 2, 3, 4, 5].map((num) => (
+                    <option key={num} value={num}>{num} Stars</option>
+                ))}
+                 </select>
+            <button onClick={submitReview}>Submit</button>
+        </div>
+    );
+};
+
+export default ItemReview;

@@ -1,0 +1,37 @@
+jsx
+Copy code
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const Profile = () => {
+    const [user, setUser] = useState({});
+    const [history, setHistory] = useState([]);
+
+    useEffect(() => {
+        // Fetch the user's profile information
+        axios.get('/api/user/profile').then((response) => {
+            setUser(response.data);
+        });
+
+        // Fetch auction history
+        axios.get('/api/user/auction-history').then((response) => {
+            setHistory(response.data);
+        });
+    }, []);
+
+    return (
+        <div>
+            <h1>{user.username}'s Profile</h1>
+            <p>Email: {user.email}</p>
+
+            <h2>Auction History</h2>
+            <ul>
+                {history.map((item, index) => (
+                    <li key={index}>{item.name} - {item.status}</li>
+                ))}
+            </ul>
+        </div>
+    );
+};
+
+export default Profile;
