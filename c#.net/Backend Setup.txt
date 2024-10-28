@@ -1,0 +1,11 @@
+bash
+Copy code
+dotnet new webapi -n AuctionSystemAPI
+cd AuctionSystemAPI
+Install Entity Framework and set up authentication (JWT or ASP.NET Identity).
+
+bash
+Copy code
+dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
+dotnet add package Microsoft.EntityFrameworkCore
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer

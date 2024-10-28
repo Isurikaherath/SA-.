@@ -1,0 +1,54 @@
+csharp
+Copy code
+public class Review
+{
+    public int Id { get; set; }
+    public string Content { get; set; }
+    public int Rating { get; set; } // Rating between 1 and 5
+    public int UserId { get; set; }
+    public User User { get; set; }
+    public int ItemId { get; set; }
+    public Item Item { get; set; }
+}
+
+public class SellerRating
+{
+    public int Id { get; set; }
+    public int Rating { get; set; }
+    public int SellerId { get; set; }
+    public User Seller { get; set; }
+    public int UserId { get; set; }
+    public User User { get; set; }
+}
+API Endpoints for Reviews:
+csharp
+Copy code
+[Route("api/[controller]")]
+[ApiController]
+public class ReviewController : ControllerBase
+{
+    private readonly AuctionDbContext _context;
+
+    public ReviewController(AuctionDbContext context)
+    {
+        _context = context;
+    }
+
+    [HttpPost("item-review")]
+    public async Task<ActionResult<Review>> PostItemReview([FromBody] Review review)
+    {
+        _context.Reviews.Add(review);
+        await _context.SaveChangesAsync();
+
+        return Ok(review);
+    }
+
+    [HttpPost("seller-rating")]
+    public async Task<ActionResult<SellerRating>> PostSellerRating([FromBody] SellerRating rating)
+    {
+        _context.SellerRatings.Add(rating);
+        await _context.SaveChangesAsync();
+
+        return Ok(rating);
+    }
+}

@@ -1,0 +1,72 @@
+csharp
+Copy code
+public class User
+{
+    public int Id { get; set; }
+    public string Username { get; set; }
+    public string Email { get; set; }
+    public List<AuctionHistory> AuctionHistory { get; set; }
+}
+
+public class AuctionHistory
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Status { get; set; }
+    public int UserId { get; set; }
+    public User User { get; set; }
+}
+UserController for User Profile & History:
+csharp
+Copy code
+[Route("api/[controller]")]
+[ApiController]
+public class UserController : ControllerBase
+{
+    private readonly AuctionDbContext _context;
+
+    public UserController(AuctionDbContext context)
+    {
+        _context = context;
+    }
+
+    [HttpGet("profile")]
+    public async Task<ActionResult<User>> GetProfile()
+    {
+       var userId = // logic to get logged-in user ID
+        var user = await _context.Users
+            .Include(u => u.AuctionHistory)
+            .FirstOrDefaultAsync(u => u.Id == userId);
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(user);
+    }
+
+    [HttpGet("auction-history")]
+    public async Task<ActionResult<IEnumerable<AuctionHistory>>> GetAuctionHistory()
+    {
+        var userId = // logic to get logged-in user ID
+        var history = await _context.AuctionHistories
+            .Where(ah => ah.UserId == userId)
+            .ToListAsync();
+
+        return Ok(history);
+    }
+    [HttpGet("notifications")]
+    public async Task<ActionResult<IEnumerable<Notification>>> GetNotifications()
+    {
+        var userId = // logic to get logged-in user ID
+        var notifications = await _context.Notifications
+            .Where(n => n.UserId == userId)
+            .ToListAsync();
+
+        return Ok(notifications);
+    }
+}
+
+
+
